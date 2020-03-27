@@ -1,0 +1,35 @@
+import React from 'react';
+import { Typography, Grid } from '@material-ui/core';
+import ListCourseItem from '../ListCourseItem';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+
+function CourseList(props) {
+    const courses = props.courses;
+    const history = useHistory();
+    const match = useRouteMatch();
+
+    const onCourseSelected = course => {
+        props.requestCourse(course);
+        history.push(`${match.url}/${course.id}`);
+    };
+
+    const coursesList = (courses.length !== 0) ? (
+        <Grid container>
+            {courses.map(course => 
+                <Grid item xs={4} key={course.id}>
+                    <ListCourseItem value={course} 
+                        onClick={() => onCourseSelected(course)} />
+                </Grid>
+            )}
+        </Grid>) :
+        (<Typography variant="h6">No hay cursos disponibles para este usuario</Typography>);
+        
+    return (
+        <>
+            <Typography variant="h2" style={{marginBottom: '24px'}}>Mis Cursos ({courses.length})</Typography>            
+            {coursesList}
+        </>
+    );
+}
+
+export default CourseList;
