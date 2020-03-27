@@ -67,10 +67,7 @@ function Dashboard() {
       <>
         {topbar}
         <DashboardRouter />
-        
-        <div className={classes.copyright}>
-            <Copyright />
-        </div>
+        <Copyright className={classes.copyright}/>
       </>
     </ThemeProvider>
   );
