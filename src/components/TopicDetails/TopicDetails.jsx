@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { Typography, CircularProgress} from '@material-ui/core';
 import { useParams } from 'react-router-dom';
+import TopicPlayer from '../TopicPlayer';
+import TopicContent from '../TopicContent';
 
 function TopicDetails({requestCourse, requestTopic, topicsLoaded, ...props}) {
     const {courseId, topicId} = useParams();
@@ -29,6 +31,9 @@ function TopicDetails({requestCourse, requestTopic, topicsLoaded, ...props}) {
             <Typography variant="h2">Tema Seleccionado</Typography>
             <p>Nombre: {props.topic.name}</p>
             <p>Descripcion: {props.topic.description}</p>
+
+            <TopicPlayer courseId={courseId} />
+            <TopicContent courseId={courseId} />
         </>
     );
 }

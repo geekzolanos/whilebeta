@@ -32,9 +32,9 @@ function ListTopicItem(props) {
                 <Grid item sm>
                     <Typography variant="h6" gutterBottom>{topic.name}</Typography>
                     <Chip variant="outlined" size="small" icon={<WatchLater />} label={`${topic.length} Min`} className={classes.duration}/>
-                    <Typography variant="body2" textAlign="justify">{topic.description}</Typography>
+                    <Typography variant="body2" align="justify">{topic.description}</Typography>
                 </Grid>
-                <Grid item alignItems="center" justify="right">
+                <Grid item>
                     <ChevronRight className={classes.goIcon}/>
                 </Grid>
             </Grid>
