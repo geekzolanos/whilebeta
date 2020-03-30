@@ -45,7 +45,7 @@ function ListCourseItem(props) {
             <div className={classes.content}>
                 <img src={course.logo} className={classes.logo} alt="Logo" />
                 <Typography variant="h6">{course.name}</Typography>
-                <Typography variant="subtitle"><b>Profesor:</b> {course.teacher.name}</Typography>
+                <Typography variant="subtitle1"><b>Profesor:</b> {course.teacher.name}</Typography>
                 <Chip className={classes.duration} 
                     variant="outlined" 
                     icon={<WatchLater />}
