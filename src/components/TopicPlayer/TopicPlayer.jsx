@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useStorage } from 'reactfire';
 import { ReactComponent as VolumeIcon } from 'assets/img/volume.svg';
@@ -15,6 +15,7 @@ function VideoPlayer(canvas, ref, onState, onMeta) {
     let _playbackState = PlaybackStates.Waiting;
     let _constraints = null;
     let _meta = {};
+    let _intervalId = null;
 
     const drawCurFrame = () => {
         ctx.drawImage($video, _constraints.x, _constraints.y, _constraints.width, _constraints.height);
@@ -43,17 +44,19 @@ function VideoPlayer(canvas, ref, onState, onMeta) {
 
         if(state === PlaybackStates.Playing) {
             window.requestAnimationFrame(playbackLoop);
-
+            _intervalId = setInterval(updateCurTime, 1000);
+        } else {
+            clearInterval(_intervalId);
         }
     };
 
     const updateCurTime = () => {
-        _meta = Object.assign({currentTime: $video.currentTime}, _meta);
+        _meta = {..._meta, currentTime: $video.currentTime};
         onMeta(_meta);
     }
 
     const updateVolume = () => {
-        _meta = Object.assign({volume: $video.volume}, _meta);
+        _meta = {..._meta, volume: $video.volume, muted: $video.muted};
         onMeta(_meta);
     }
 
@@ -61,7 +64,8 @@ function VideoPlayer(canvas, ref, onState, onMeta) {
         _meta = {
             currentTime: $video.currentTime,
             duration: $video.duration,
-            volume: $video.volume
+            volume: $video.volume,
+            muted: $video.muted
         };
 
         onMeta(_meta);
@@ -84,7 +88,7 @@ function VideoPlayer(canvas, ref, onState, onMeta) {
         
         $video.addEventListener('canplay', onVideoLoaded);
         $video.addEventListener('pause', () => setState(PlaybackStates.Paused));
-        $video.addEventListener('play', () => setState(PlaybackStates.Playing));
+        $video.addEventListener('playing', () => setState(PlaybackStates.Playing));
         $video.addEventListener('waiting', () => setState(PlaybackStates.Waiting));
         $video.addEventListener('ended', () => setState(PlaybackStates.Ended));
         
@@ -94,8 +98,18 @@ function VideoPlayer(canvas, ref, onState, onMeta) {
 
     this.play = () => { $video.play() };
     this.pause = () => { $video.pause(); }
-    this.setVolume = val => { // }
-    this.setCurrentTime = val => { // }
+    this.setVolume = val => { 
+        $video.volume = val;
+        updateVolume();
+    }
+    this.toggleMute = () => { 
+        $video.muted = !$video.muted;
+        updateVolume();
+    }
+    this.setCurrentTime = val => { 
+        $video.currentTime = val * $video.duration;
+        updateCurTime();
+    }
     this.flush = () => {
         $video.pause();
         $video.remove();
@@ -263,8 +277,19 @@ const useStyle = makeStyles(theme => ({
     },
     fullscreen: {        
         cursor: 'pointer'
+    },
+    time: {
+        color: theme.palette.common.white,
+        marginLeft: theme.spacing(2.4),
     }
 }));
+
+const neatTime = time => {
+    var minutes = Math.floor((time % 3600)/60);
+    var seconds = Math.floor(time % 60);
+    seconds = seconds > 9 ? seconds : `0${seconds}`;
+    return `${minutes}:${seconds}`;
+}
 
 function TopicPlayer({courseId}) {
     const storage = useStorage();
@@ -273,11 +298,12 @@ function TopicPlayer({courseId}) {
     const playerRef = useRef();
     const classes = useStyle();
     const [playback, setPlayback] = useState(PlaybackStates.Waiting);
+    const [meta, setMeta] = useState({});
 
     useEffect(() => {
         if(canvasRef.current) {            
             const ref = storage.ref().child(`courses/${courseId}/video.mp4`);
-            playRef.current = new VideoPlayer(canvasRef.current, ref, setPlayback);
+            playRef.current = new VideoPlayer(canvasRef.current, ref, setPlayback, setMeta);
         }
     }, [canvasRef, courseId, storage]);
 
@@ -287,8 +313,27 @@ function TopicPlayer({courseId}) {
         }
     }, []);
 
-    const toggleState = () => playback !== PlaybackStates.Playing ? playRef.current.play() : playRef.current.pause();
-    const requestFullscreen = () => (document.fullscreenElement == null) ? playerRef.current.requestFullscreen() : document.exitFullscreen();
+    const toggleState = useCallback(() => {
+        return (playback !== PlaybackStates.Playing ? playRef.current.play() : playRef.current.pause())
+    }, [playback, playRef]);
+
+    const requestFullscreen = useCallback(() => (document.fullscreenElement == null ? playerRef.current.requestFullscreen() : document.exitFullscreen()), [playerRef]);
+
+    const progressUpdate = useCallback(e => {
+        const newTime = e.nativeEvent.offsetX / e.currentTarget.offsetWidth;
+	    playRef.current.setCurrentTime(newTime);
+    }, [playRef]);
+    
+    const volumeUpdate = useCallback(e => {
+        let volume = e.nativeEvent.offsetX / e.currentTarget.offsetWidth;
+        volume = volume < 0.1 ? 0 : volume;
+        playRef.current.setVolume(volume);
+    }, [playRef]);
+
+    const volume = useMemo(() => (meta.muted ? 0 : `${meta.volume * 100}%`), [meta.volume, meta.muted]);
+    const progress = useMemo(() => (`${meta.currentTime / meta.duration * 100}%`), [meta.currentTime, meta.duration]);
+    const currentTime = useMemo(() => neatTime(meta.currentTime), [meta.currentTime]);
+    const duration = useMemo(() => neatTime(meta.duration), [meta.duration]);
 
     return (
         <>
@@ -296,29 +341,35 @@ function TopicPlayer({courseId}) {
                 <div className={classes.player} ref={playerRef}>
                     <canvas ref={canvasRef} className={classes.canvas}/>
 
+                    {meta.duration &&
                     <div className={classes.controls}>
-                        <div className={classes.progress}>
-                            <div className={classes.progressFilled}></div>
+                        <div className={classes.progress}
+                            onClick={progressUpdate}>
+                            <div className={classes.progressFilled}
+                                style={{width: progress}}></div>
                         </div>
                         <div className={classes.flexCenter}>
                             <div className={clsx(classes.controlsMain, classes.flexCenter)}>
                                 <div className={clsx(classes.playBtn, {paused: playback !== PlaybackStates.Playing})} onClick={toggleState}></div>
                                 <div className={classes.flexCenter}>
-                                    <div className={clsx(classes.volumeBtn, 'loud')}>
+                                    <div className={clsx(classes.volumeBtn, {muted: meta.muted || meta.volume <= 0.1, loud: meta.volume >= 0.7})}
+                                        onClick={() => playRef.current.toggleMute()}>
                                         <VolumeIcon />
                                     </div>
-                                    <div className={classes.volumeSlider}>
-                                        <div className={classes.volumeFilled}></div>
+                                    <div className={classes.volumeSlider}
+                                        onClick={volumeUpdate}>
+                                        <div className={classes.volumeFilled}
+                                            style={{width: volume}}></div>
                                     </div>
                                 </div>
-                                <div><span className="time-current"></span><span className="time-total"></span></div>
-                            </div>
+                                <span className={classes.time}>{`${currentTime} / ${duration}`}</span>
+                            </div>                            
                         
                             <div className={classes.fullscreen} onClick={requestFullscreen}>
                                 <FullscreenIcon />
                             </div>
                         </div>
-                    </div>
+                    </div>}
                 </div>
             </div>
         </>
