@@ -49,7 +49,10 @@ function Dashboard() {
   const topbar = (
     <AppBar className={classes.topbar} elevation={1} position="static">
       <Toolbar variant="dense">
-        <Typography variant="h6" className={classes.title}>IncesInfo</Typography>
+        <Typography variant="h6" className={classes.title}>
+          <Link to="/" className={classes.link}>Formacite</Link>
+        </Typography>
+        
         
         <AuthCheck fallback={btnLogin}>          
           <Button color="inherit">

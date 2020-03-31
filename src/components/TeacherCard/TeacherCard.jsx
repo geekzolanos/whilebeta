@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardActions, Typography, Avatar, Button } from '@material-ui/core';
+import { Card, CardActions, Typography, Avatar, Button, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Mail, LinkedIn } from '@material-ui/icons';
 
@@ -34,10 +34,10 @@ function TeacherCard({teacher}) {
             <Typography variant="overline" color="textSecondary" align="center">{teacher.degree}</Typography>
             <Typography variant="body2" align="center" className={classes.description}>{teacher.description}</Typography>
             <CardActions>
-                <Button size="small" startIcon={<Mail />} className={classes.mAuto}>Contactar</Button>
+                <Link className={classes.mAuto} underline="none" href={`mailto:${teacher.email}`}><Button size="small" startIcon={<Mail />}>Contactar</Button></Link>
 
                 {teacher.profileUrl && 
-                    <Button size="small" startIcon={<LinkedIn />} className={classes.mAuto}>Ver Perfil</Button>}
+                    <Link className={classes.mAuto} underline="none" href={teacher.profileUrl} target="blank"><Button size="small" startIcon={<LinkedIn />}>Ver Perfil</Button></Link>}
             </CardActions>
         </Card>
     );

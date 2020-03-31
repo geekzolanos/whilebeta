@@ -5,6 +5,7 @@ import { WatchLater, MenuBook } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
     meta: {
+        marginTop: theme.spacing(2),
         textAlign: 'right',
         '& .MuiChip-root:first-child': {
             marginRight: theme.spacing(1)
@@ -37,7 +38,7 @@ function CourseFeatured({course, topics}) {
                 <Grid item sm container direction="column">
                     <Grid item xs>
                         <Typography variant="h2" gutterBottom>{course.name}</Typography>
-                        <Typography variant="subtitle1" align="justify">{course.description}</Typography>
+                        <Typography variant="body2" align="justify">{course.description}</Typography>
                     </Grid>
                     <Grid item className={classes.meta}>
                         <Chip variant="outlined" icon={<WatchLater />} label={`${course.duration} Hrs`} />

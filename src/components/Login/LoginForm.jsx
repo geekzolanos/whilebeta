@@ -1,14 +1,15 @@
 import React from 'react';
-import { Button, TextField, Box } from '@material-ui/core';
+import { Button, TextField, Box, CircularProgress } from '@material-ui/core';
 import Copyright from '../Copyright';
 
-export default ({className, onSubmit}) => (    
+export default ({className, busy, onSubmit}) => (    
   <form className={className} onSubmit={onSubmit}>
     <TextField
       variant="outlined"
       margin="normal"
       required
       fullWidth
+      id="cedula"
       label="Cedula"
       name="cedula"
       type="number"
@@ -25,6 +26,9 @@ export default ({className, onSubmit}) => (
       type="password"
       autoComplete="current-password"
     />
+
+    { busy && <CircularProgress /> }
+    
     <Button
       type="submit"
       fullWidth
