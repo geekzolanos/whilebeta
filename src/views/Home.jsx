@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Container, Typography, Button, Grid, Paper, Fade } from '@material-ui/core';
+import { Box, Container, Typography, Button, Grid, Paper, Link } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { PlayArrow, Accessibility, TrackChanges, LinkedIn } from '@material-ui/icons';
 import { ReactComponent as Logo } from '../assets/img/team.svg';
@@ -69,8 +70,8 @@ function Home() {
             <Container className={classes.featuredContainer} maxWidth="md">
                 <Grid container alignItems="center">
                     <Grid item xs={8}>
-                        <Typography variant="h1" className={classes.title}>Conecte con sus profesores en Linea</Typography>
-                        <Button className={classes.btnLogin} variant="contained">Ingrese Ahora</Button>
+                        <Typography variant="h1" className={classes.title}>Conecte con sus profesores en linea</Typography>
+                        <Link component={RouterLink} to='/login' underline="none"><Button className={classes.btnLogin} variant="contained">Ingrese Ahora</Button></Link>
                         <Button className={classes.btnVideo} startIcon={<PlayArrow />}>Ver Video</Button>
                     </Grid>
                     <Grid item xs={4} className={classes.featuredImg}>
@@ -79,9 +80,7 @@ function Home() {
                 </Grid>
             </Container>
             
-            <Fade timeout={800}>
-                <svg className={classes.lineBorder} viewBox="0 0 1440 320"><path d="M0,235L1440,288L1440,320L0,320Z"></path></svg>
-            </Fade>
+            <svg className={classes.lineBorder} viewBox="0 0 1440 320"><path d="M0,235L1440,288L1440,320L0,320Z"></path></svg>
         </Box>
     );
 

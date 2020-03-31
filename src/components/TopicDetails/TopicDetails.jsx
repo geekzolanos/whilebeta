@@ -17,7 +17,8 @@ const useStyles = makeStyles(theme => ({
         marginBottom: 12
     },
     content: {
-        padding: theme.spacing(4, 3)
+        padding: theme.spacing(4, 3),
+        marginTop: theme.spacing(4)
     }
 }));
 
@@ -82,15 +83,14 @@ function TopicDetails({ requestCourse, requestTopic, topicsLoaded,
             <Grid container spacing={4}>
                 <Grid item md={8}>
                     <TopicPlayer courseId={courseId} />
-                </Grid>
-                <Grid item md={4}>
-                    {metaCard}
-                </Grid>
-                <Grid item md={8}>
+                    
                     <Paper className={classes.content}>
                         <Typography variant="subtitle2" color="textSecondary" gutterBottom>Contenido</Typography>
                         <TopicContent courseId={courseId} />
                     </Paper>
+                </Grid>
+                <Grid item md={4}>
+                    {metaCard}
                 </Grid>
             </Grid>
         </>

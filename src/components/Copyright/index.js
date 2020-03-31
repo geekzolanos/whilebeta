@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 export default ({className}) => (
   <Typography variant="body2" color="textSecondary" align="center" className={className}>
     {'Copyright © '}
-    <Link color="inherit" href="https://geekzolanos.github.io/">Geekzolanos</Link>
+    <Link color="inherit" href="https://geekzolanos.github.io/" target="blank">Geekzolanos</Link>
     {' '}{new Date().getFullYear()}{'.'}
   </Typography>
 );
