@@ -16,7 +16,7 @@ function CourseList(props) {
     const coursesList = (courses.length !== 0) ? (
         <Grid container>
             {courses.map(course => 
-                <Grid item xs={4} key={course.id}>
+                <Grid item xs={12} md={4} key={course.id}>
                     <ListCourseItem value={course} 
                         onClick={() => onCourseSelected(course)} />
                 </Grid>

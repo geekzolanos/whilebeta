@@ -58,7 +58,10 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(-24),
         padding: theme.spacing(4,8),
         borderRadius: '10px',
-        height: '320px'
+
+        [theme.breakpoints.up('md')]: {
+            height: '320px'
+        }
     }
 }));
 
@@ -69,12 +72,12 @@ function Home() {
         <Box className={classes.featured}>
             <Container className={classes.featuredContainer} maxWidth="md">
                 <Grid container alignItems="center">
-                    <Grid item xs={8}>
+                    <Grid item xs={12} md={8}>
                         <Typography variant="h1" className={classes.title}>Conecte con sus profesores en linea</Typography>
                         <Link component={RouterLink} to='/login' underline="none"><Button className={classes.btnLogin} variant="contained">Ingrese Ahora</Button></Link>
                         <Button className={classes.btnVideo} startIcon={<PlayArrow />}>Ver Video</Button>
                     </Grid>
-                    <Grid item xs={4} className={classes.featuredImg}>
+                    <Grid item xs={12} md={4} className={classes.featuredImg}>
                         <Logo />
                     </Grid>
                 </Grid>
