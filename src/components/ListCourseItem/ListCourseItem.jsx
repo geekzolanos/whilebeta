@@ -8,16 +8,19 @@ function ListCourseItem(props) {
 
     const useStyles = makeStyles(theme => ({
         root: {
-            display: 'block',
-            width: '100%',
-            textAlign: 'initial'
+            backgroundColor: course.background,
+            height: '100%'
         },
-        container: {            
+        button: {
             padding: theme.spacing(3),
-            backgroundColor: course.background
+            textAlign: 'initial',
+            width: '100%',
+            height: '100%'
         },
         content: {
-            position: 'relative'
+            position: 'relative',
+            width: '100%',
+            minHeight: '100%'
         },
         logo: {
             width: "64px",
@@ -40,19 +43,19 @@ function ListCourseItem(props) {
     const classes = useStyles();
 
     return (
-        <ButtonBase className={classes.root}>
-        <Paper onClick={props.onClick} className={classes.container} elevation={2}>
-            <div className={classes.content}>
-                <img src={course.logo} className={classes.logo} alt="Logo" />
-                <Typography variant="h6">{course.name}</Typography>
-                <Typography variant="subtitle1"><b>Profesor:</b> {course.teacher.name}</Typography>
-                <Chip className={classes.duration} 
-                    variant="outlined" 
-                    icon={<WatchLater />}
-                    label={`${course.duration} Hrs`} />
-            </div>
-        </Paper>        
-        </ButtonBase>
+        <Paper onClick={props.onClick} className={classes.root} elevation={2}>
+            <ButtonBase className={classes.button}>
+                <div className={classes.content}>
+                    <img src={course.logo} className={classes.logo} alt="Logo" />
+                    <Typography variant="h6">{course.name}</Typography>
+                    <Typography variant="subtitle1"><b>Profesor:</b> {course.teacher.name}</Typography>
+                    <Chip className={classes.duration} 
+                        variant="outlined" 
+                        icon={<WatchLater />}
+                        label={`${course.duration} Hrs`} />
+                </div>
+            </ButtonBase>
+        </Paper>
     );
 }
 

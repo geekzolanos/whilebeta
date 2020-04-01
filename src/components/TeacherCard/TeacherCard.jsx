@@ -5,8 +5,8 @@ import { Mail, LinkedIn } from '@material-ui/icons';
 
 const useStyle = makeStyles(theme => ({
     avatar: {
-        width: theme.spacing(7),
-        height: theme.spacing(7),        
+        width: theme.spacing(10),
+        height: theme.spacing(10),        
         margin: `${theme.spacing(2)}px auto`
     },
     mAuto: {
@@ -16,7 +16,7 @@ const useStyle = makeStyles(theme => ({
         textAlign: 'center'
     },
     description: {
-        padding: theme.spacing(1.5,0)
+        padding: theme.spacing(1.5)
     }
 }));
 

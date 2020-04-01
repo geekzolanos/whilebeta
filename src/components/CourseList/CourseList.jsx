@@ -14,7 +14,7 @@ function CourseList(props) {
     };
 
     const coursesList = (courses.length !== 0) ? (
-        <Grid container>
+        <Grid container spacing={2}>
             {courses.map(course => 
                 <Grid item xs={12} md={4} key={course.id}>
                     <ListCourseItem value={course} 
