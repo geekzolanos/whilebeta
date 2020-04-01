@@ -52,7 +52,7 @@ function TopicPlayer({courseId, topicId}) {
         <>
             <div className={classes.playerContainer}>
                 <div className={classes.player} ref={playerRef}>
-                    <canvas ref={canvasRef} className={classes.canvas}/>
+                    <canvas ref={canvasRef} className={classes.canvas} onContextMenu={e => e.preventDefault()}/>
 
                     {meta.duration &&
                     <div className={classes.controls}>
