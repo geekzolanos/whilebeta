@@ -7,7 +7,7 @@ import useStyle from './style';
 import { VideoPlayer, PlaybackStates } from './videoPlayer';
 import { neatTime } from 'config/utils';
 
-function TopicPlayer({courseId}) {
+function TopicPlayer({courseId, topicId}) {
     const storage = useStorage();
     const canvasRef = useRef();
     const playerRef = useRef();
@@ -19,10 +19,10 @@ function TopicPlayer({courseId}) {
     // Initialize VideoPlayer
     useEffect(() => {
         if(canvasRef.current) {            
-            const ref = storage.ref().child(`courses/${courseId}/video.mp4`);
+            const ref = storage.ref().child(`courses/${courseId}/${topicId}/video.mp4`);
             playRef.current = new VideoPlayer(canvasRef.current, ref, setPlayback, setMeta);
         }
-    }, [canvasRef, courseId, storage]);
+    }, [canvasRef, courseId, topicId, storage]);
 
     // Flush on unmount
     useEffect(() => {

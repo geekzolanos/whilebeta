@@ -82,11 +82,11 @@ function TopicDetails({ requestCourse, requestTopic, topicsLoaded,
             <Link component={RouterLink} underline="none" to={`/courses/${course.id}`}><Button size="small" className={classes.pos} startIcon={<ChevronLeft />}>Regresar a listado de temas</Button></Link>
             <Grid container spacing={4}>
                 <Grid item md={8}>
-                    <TopicPlayer courseId={courseId} />
+                    <TopicPlayer courseId={courseId} topicId={topicId} />
                     
                     <Paper className={classes.content}>
                         <Typography variant="subtitle2" color="textSecondary" gutterBottom>Contenido</Typography>
-                        <TopicContent courseId={courseId} />
+                        <TopicContent courseId={courseId} topicId={topicId} />
                     </Paper>
                 </Grid>
                 <Grid item md={4}>
