@@ -22,16 +22,18 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function TopicDetails({ requestCourse, requestTopic, topicsLoaded,
-    topic, course, ...props}) {
+function TopicDetails({ requestCourse, requestTopic, coursesLoaded, topicsLoaded,
+    topic, course}) {
 
     const classes = useStyles();
     const {courseId, topicId} = useParams();
 
     useEffect(() => {
-        requestCourse(courseId);
+        if(coursesLoaded)
+            requestCourse(courseId);
+
         return () => requestCourse(null);
-    }, [requestCourse, courseId]);
+    }, [requestCourse, courseId, coursesLoaded]);
 
     useEffect(() => {
         if(topicsLoaded)

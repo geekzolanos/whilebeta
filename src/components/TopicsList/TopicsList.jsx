@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function TopicsList({requestCourse, course, topics, ...props}) {
+function TopicsList({requestCourse, course, topics, coursesLoaded, ...props}) {
     const { courseId } = useParams();
     const match = useRouteMatch();
     const history = useHistory();
@@ -24,9 +24,11 @@ function TopicsList({requestCourse, course, topics, ...props}) {
     };
 
     useEffect(() => {
-        requestCourse(courseId);
+        if(coursesLoaded)
+            requestCourse(courseId);
+            
         return () => requestCourse(null);
-    }, [requestCourse, courseId]);
+    }, [requestCourse, coursesLoaded, courseId]);
 
     if(!topics)
         return <CircularProgress />;
