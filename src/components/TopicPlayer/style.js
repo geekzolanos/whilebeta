@@ -1,6 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
-
-export default makeStyles(theme => ({
+export default theme => ({
     flexCenter: {
         display: 'flex',
         alignItems: 'center',
@@ -174,4 +172,4 @@ export default makeStyles(theme => ({
     time: {
         marginLeft: theme.spacing(2.4),
     }
-}));
+});
