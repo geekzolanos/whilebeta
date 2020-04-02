@@ -94,9 +94,6 @@ function Courses() {
             setErr(ErrStates.TopicNull);
         }
     }, [topics]);
-
-    if(!courses)
-        return <CircularProgress />;
     
     return (
         <Container maxWidth="md" style={{marginTop: '32px'}}>
@@ -116,8 +113,10 @@ function Courses() {
                             requestTopic={onTopicRequest} />
                 </Route>
                         
-                <Route path={match.path}
-                        children={<CourseList courses={courses} requestCourse={onCourseRequest} />} />
+                <Route path={match.path}>
+                    <CourseList courses={courses} 
+                        requestCourse={onCourseRequest} />
+                </Route>
             </Switch>
             
             <Snackbar open={errOpen} autoHideDuration={5000} onClose={handleErrClose}>
