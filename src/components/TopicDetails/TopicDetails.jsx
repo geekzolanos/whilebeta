@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Typography, CircularProgress, Grid, Card, CardContent, CardActions, Button, Paper, Table, TableBody, TableCell, TableRow, Link } from '@material-ui/core';
+import { Typography, CircularProgress, Grid, Card, CardContent, CardActions, Button, Table, TableBody, TableCell, TableRow, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Mail, ChevronLeft } from '@material-ui/icons';
 import { useParams, Link as RouterLink } from 'react-router-dom';

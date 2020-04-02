@@ -80,7 +80,7 @@ function TopicPlayer({classes, courseId, topicId}) {
             children={<FullscreenIcon />} />
     );
 
-    const $duration = currentTime && <span className={classes.time}>{`${currentTime} / ${duration}`}</span>;
+    const $duration = meta.duration && <span className={classes.time}>{`${currentTime} / ${duration}`}</span>;
     
     const $spinner = playback === PlaybackStates.Waiting && 
         <div className='absolute-center' children={<CircularProgress width={72} height={72} color="inherit"/>} />;

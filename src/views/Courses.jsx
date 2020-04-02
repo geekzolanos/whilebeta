@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useFirestore, useUser } from 'reactfire';
 import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom';
-import { CircularProgress, Container, Snackbar } from '@material-ui/core';
+import { Container, Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { getCoursesByUser, getTopicsByCourse } from '../api';
 import CourseList from '../components/CourseList';
