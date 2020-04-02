@@ -101,13 +101,16 @@ function Courses() {
                 <Route path={`${match.path}/:courseId/topic/:topicId`}>
                     <TopicDetails course={curCourse} 
                         topic={curTopic} 
-                        topicsLoaded={topics != null}
+                        coursesLoaded={!!courses}
+                        topicsLoaded={!!topics}
                         requestCourse={onCourseRequest}
                         requestTopic={onTopicRequest} />
                 </Route>
 
                 <Route path={`${match.path}/:courseId`}>
-                    <TopicsList course={curCourse} 
+                    <TopicsList 
+                            coursesLoaded={!!courses}
+                            course={curCourse} 
                             topics={topics}
                             requestCourse={onCourseRequest}
                             requestTopic={onTopicRequest} />
