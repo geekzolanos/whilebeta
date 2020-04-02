@@ -15,6 +15,7 @@ export default makeStyles(theme => ({
         height: '45vh',
         position: 'relative',
         overflow: 'hidden',
+        color: theme.palette.common.white,
         backgroundColor: theme.palette.common.black,
         
         '&:hover $controls': {
@@ -161,7 +162,6 @@ export default makeStyles(theme => ({
         cursor: 'pointer'
     },
     time: {
-        color: theme.palette.common.white,
         marginLeft: theme.spacing(2.4),
     }
 }));

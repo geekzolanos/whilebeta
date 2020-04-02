@@ -3,7 +3,7 @@ import { useStorage } from 'reactfire';
 import { ReactComponent as VolumeIcon } from 'assets/img/volume.svg';
 import { ReactComponent as FullscreenIcon } from 'assets/img/fullscreen.svg';
 import clsx from 'clsx';
-import useStyle from './style';
+import { CircularProgress } from '@material-ui/core';
 import { VideoPlayer, PlaybackStates } from './videoPlayer';
 import { neatTime } from 'config/utils';
 
@@ -48,6 +48,9 @@ function TopicPlayer({courseId, topicId}) {
     const currentTime = useMemo(() => neatTime(meta.currentTime), [meta.currentTime]);
     const duration = useMemo(() => neatTime(meta.duration), [meta.duration]);
 
+    const $spinner = playback === PlaybackStates.Waiting && 
+        <div className='absolute-center' children={<CircularProgress width={72} height={72} color="inherit"/>} />;
+    
     return (
         <>
             <div className={classes.playerContainer}>
