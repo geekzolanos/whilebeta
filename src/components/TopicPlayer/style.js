@@ -33,6 +33,16 @@ export default makeStyles(theme => ({
         top: '50%',
         transform: 'translateY(-50%)'
     },
+    bigPlayBtn: {
+        width: '6rem',
+        height: '6rem',
+        color: '#eee',
+        cursor: 'pointer',
+
+        '&:hover': {
+            color: '#fff'
+        }
+    },
     controls: {
         position: 'absolute',
         padding: theme.spacing(1.5, 3),

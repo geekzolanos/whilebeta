@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
 import { useStorage } from 'reactfire';
 import { ReactComponent as VolumeIcon } from 'assets/img/volume.svg';
 import { ReactComponent as FullscreenIcon } from 'assets/img/fullscreen.svg';
+import { ReactComponent as PlayIcon } from 'assets/img/play.svg';
 import clsx from 'clsx';
 import { CircularProgress } from '@material-ui/core';
 import { VideoPlayer, PlaybackStates } from './videoPlayer';
@@ -51,13 +52,16 @@ function TopicPlayer({courseId, topicId}) {
     const $spinner = playback === PlaybackStates.Waiting && 
         <div className='absolute-center' children={<CircularProgress width={72} height={72} color="inherit"/>} />;
     
+    const $btnBigPlay = playback === PlaybackStates.Paused && 
+        <PlayIcon className={clsx(classes.bigPlayBtn, 'absolute-center')} onClick={toggleState}/>;
+
     return (
         <>
             <div className={classes.playerContainer}>
                 <div className={classes.player} ref={playerRef}>
-                    <canvas ref={canvasRef} className={classes.canvas} onContextMenu={e => e.preventDefault()}/>
-
-                    {meta.duration &&
+                    <canvas ref={canvasRef} className={classes.canvas} onContextMenu={e => e.preventDefault()} />
+                    {$spinner}
+                    {$btnBigPlay}
                     <div className={classes.controls}>
                         <div className={classes.progress}
                             onClick={progressUpdate}>
