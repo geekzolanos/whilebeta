@@ -14,8 +14,11 @@ function VideoPlayer(canvas, ref, onState, onMeta) {
     const drawCurFrame = () => {
         ctx.drawImage($video, _constraints.x, _constraints.y, _constraints.width, _constraints.height);
     };
-
+    
     const onVideoLoaded = () => {
+        // Remove
+        $video.removeEventListener('canplay', onVideoLoaded);
+
         // Resize Listener
         window.addEventListener('resize', refreshViewport);
         refreshViewport();
@@ -27,9 +30,6 @@ function VideoPlayer(canvas, ref, onState, onMeta) {
         // Ready State
         setState(PlaybackStates.Paused);
         fetchMeta();
-
-        // Remove
-        $video.removeEventListener('canplay', onVideoLoaded);
     };
 
     const setState = state => {
@@ -105,7 +105,7 @@ function VideoPlayer(canvas, ref, onState, onMeta) {
         updateCurTime();
     }
     this.flush = () => {
-        $video.pause();
+        $video.src = null;
         $video.remove();
     }
 
