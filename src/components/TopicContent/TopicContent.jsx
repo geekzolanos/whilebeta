@@ -12,21 +12,23 @@ const styles = theme => ({
     }
 });
 
-function TopicContent({classes, courseId, topicId}) {
+function TopicContent({classes, meta}) {
     const storage = useStorage();
-    const [content, setContent] = useState(null);
-
+    const [content, setContent] = useState();
+    
     useEffect(() => {
-        if(courseId && topicId) {
-            storage.ref()
-                .child(`courses/${courseId}/${topicId}/content.md`)
+        const {course, topic} = meta;
+
+        if(topic) {
+            storage.ref().child(`courses/${course.id}/${topic.id}/content.md`)
                 .getDownloadURL()
                 .then(window.fetch)
                 .then(res => res.text())
                 .then(setContent);
         }
-    }, [courseId, topicId, storage]);
-    
+
+        return () => setContent(null);
+    }, [meta, storage]);
 
     return (        
         <Paper className={classes.content}>

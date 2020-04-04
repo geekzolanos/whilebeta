@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { VideoPlayer, PlaybackStates } from './videoPlayer';
 import { neatTime } from 'config/utils';
 
-function TopicPlayer({classes, courseId, topicId}) {
+function TopicPlayer({classes, ...props}) {
     const storage = useStorage();
     const canvasRef = useRef();
     const playerRef = useRef();
@@ -20,16 +20,15 @@ function TopicPlayer({classes, courseId, topicId}) {
 
     // Initialize VideoPlayer
     useEffect(() => {
-        if(canvasRef.current) {            
-            const ref = storage.ref().child(`courses/${courseId}/${topicId}/video.mp4`);
+        const {course, topic} = props.meta;
+
+        if(canvasRef.current && topic) {            
+            const ref = storage.ref().child(`courses/${course.id}/${topic.id}/video.mp4`);
             playRef.current = new VideoPlayer(canvasRef.current, ref, setPlayback, setMeta);
         }
-    }, [canvasRef, courseId, topicId, storage]);
 
-    // Flush on unmount
-    useEffect(() => {
-        return () => playRef.current.flush()
-    }, []);
+        return () => playRef.current && playRef.current.flush();
+    }, [canvasRef, props.meta, storage]);
 
     const toggleState = useCallback(() => (playback !== PlaybackStates.Playing ? playRef.current.play() : playRef.current.pause()), [playback, playRef]);
     const requestFullscreen = useCallback(() => (document.fullscreenElement == null ? playerRef.current.requestFullscreen() : document.exitFullscreen()), [playerRef]);
