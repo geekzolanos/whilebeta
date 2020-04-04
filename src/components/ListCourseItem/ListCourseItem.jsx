@@ -43,7 +43,7 @@ function ListCourseItem(props) {
     const classes = useStyles();
 
     return (
-        <Paper onClick={props.onClick} className={classes.root} elevation={2}>
+        <Paper className={classes.root} elevation={2}>
             <ButtonBase className={classes.button}>
                 <div className={classes.content}>
                     <img src={course.logo} className={classes.logo} alt="Logo" />

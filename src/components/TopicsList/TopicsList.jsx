@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Typography, CircularProgress, Grid, List, Hidden } from '@material-ui/core';
+import { Typography, CircularProgress, Grid, List, Hidden, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useParams, useRouteMatch, useHistory } from 'react-router-dom';
+import { useParams, useRouteMatch, Link as RouterLink } from 'react-router-dom';
 import ListTopicItem from '../ListTopicItem';
 import CourseFeatured from '../CourseFeatured';
 import TeacherCard from '../TeacherCard';
@@ -12,23 +12,12 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function TopicsList({requestCourse, course, topics, coursesLoaded, ...props}) {
-    const { courseId } = useParams();
+function TopicsList({refresh, course, topics}) {
+    const {courseId} = useParams();
     const match = useRouteMatch();
-    const history = useHistory();
     const classes = useStyles();
 
-    const onTopicSelected = topic => {
-        props.requestTopic(topic);
-        history.push(`${match.url}/topic/${topic.id}`);
-    };
-
-    useEffect(() => {
-        if(coursesLoaded)
-            requestCourse(courseId);
-            
-        return () => requestCourse(null);
-    }, [requestCourse, coursesLoaded, courseId]);
+    useEffect(() => { refresh({courseId}) }, [courseId, refresh]);
 
     if(!topics)
         return <CircularProgress />;
@@ -36,7 +25,11 @@ function TopicsList({requestCourse, course, topics, coursesLoaded, ...props}) {
     const topicList = topics.length ? (
         <List>
             {topics.map(topic => (
-                <ListTopicItem key={topic.id} value={topic} onClick={() => onTopicSelected(topic)} />
+                <Link key={topic.id} component={RouterLink} color="inherit" underline="none"
+                    to={`${match.url}/topic/${topic.id}`}>
+                        
+                    <ListTopicItem value={topic} />
+                </Link>
             ))}
         </List>
     ) : <Typography variant="h6">No hay temas asociados</Typography>;

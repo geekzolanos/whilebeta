@@ -24,7 +24,7 @@ function ListTopicItem(props) {
     const classes = useStyles();    
 
     return (
-        <ListItem button divider onClick={props.onClick} className={classes.root}>
+        <ListItem button divider className={classes.root}>
             <Grid container spacing={3}>
                 <Grid item>
                     <img src={topic.thumbUrl} alt="Thumb" className={classes.thumb} />
