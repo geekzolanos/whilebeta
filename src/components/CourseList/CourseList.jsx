@@ -1,32 +1,30 @@
 import React from 'react';
-import { Typography, Grid } from '@material-ui/core';
+import { Typography, Grid, Link } from '@material-ui/core';
 import { ListCourseItem, SkeletonCourseItem } from '../ListCourseItem';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useRouteMatch, Link as RouterLink } from 'react-router-dom';
+
+const SkeletonGrid = Array(3).fill(null).map((_, i) =>
+    <Grid item key={i} xs={12} md={4}>
+        <SkeletonCourseItem />
+    </Grid>
+);
 
 function CourseList(props) {
     const courses = props.courses;
-    const history = useHistory();
     const match = useRouteMatch();
-
-    const onCourseSelected = course => {
-        props.requestCourse(course);
-        history.push(`${match.url}/${course.id}`);
-    };
 
     const $courses = courses ?
         (courses.length > 0 ?
             courses.map(course => 
                 <Grid item xs={12} md={4} key={course.id}>
-                    <ListCourseItem value={course} 
-                        onClick={() => onCourseSelected(course)} />
+                    <Link component={RouterLink} color="inherit" underline="none"
+                        to={`${match.url}/${course.id}`}>
+                        <ListCourseItem value={course}/>
+                    </Link>
                 </Grid>
             )
         : (<Typography variant="h6">No hay cursos disponibles para este usuario</Typography>))
-    : Array(3).fill(
-        <Grid item xs={12} md={4}>
-            <SkeletonCourseItem />
-        </Grid>
-    );
+    : SkeletonGrid;
         
     return (
         <>
