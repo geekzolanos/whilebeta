@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { Component, useCallback, createElement } from 'react';
 import { useFirestore, useUser } from 'reactfire';
 import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom';
 import { Container, Snackbar } from '@material-ui/core';
@@ -8,125 +8,142 @@ import CourseList from '../components/CourseList';
 import TopicsList from '../components/TopicsList';
 import TopicDetails from '../components/TopicDetails';
 
-const ErrStates = { CourseNull: 0, TopicNull: 1 }
+const ErrStates = { CourseNull: 1, TopicNull: 2 }
 
 const ErrMessages = {
     [ErrStates.CourseNull]: 'No se ha encontrado el curso solicitado.',
     [ErrStates.TopicNull]: 'No se ha encontrado el tema solicitado.',
 };
 
-const onRequestCallback = (req, stack, set, cbSet) => {
-    if(req === undefined) return;
-
-    if(typeof req == "string") {
-        const _req = stack.find(el => el.id === req);
-        if(!_req) {
-            throw new Error("RequestNotFound");
-        }
-        
-        return set(cur => cbSet(cur, _req));
-    }
-
-    return set(cur => cbSet(cur, req));
-}
+const getReqById = (stack, id) => stack.find(el => el.id === id);
+const requiresUpdate = (it, id) => (id && !(it && it.id === id));
 
 function Courses() {
-    const [courses, setCourses] = useState(null);
-    const [curCourse, setCurCourse] = useState(null);
-    const [topics, setTopics] = useState(null);
-    const [curTopic, setCurTopic] = useState(null);
-    const [err, setErr] = useState(null);
-    const [errOpen, setErrOpen] = useState(false);
-    const firestore = useFirestore();
-    const user = useUser();
     const match = useRouteMatch();
     const history = useHistory();
 
-    // Get courses associated with this user
-    useEffect(() => { 
-        getCoursesByUser(firestore, user)
-            .then(_courses => setCourses(_courses));
-
-        return () => setCourses(null);
-    }, [firestore, user]);
-    
-    // Error Handling
-    useEffect(() => {
-        if(err === null) return;
-        
-        if(err !== ErrStates.Offline)
-            setErrOpen(true);
-
+    const handleError = useCallback(() => {
         history.replace(match.path);
-    }, [err, history, match.path]);
+    }, [history, match]);
 
-    const handleErrClose = () => setErrOpen(false);
+    const props = {
+        firestore: useFirestore(),
+        user: useUser()
+    }
 
-    // Course callback
-    // TODO: Replace with Redux backend
-    const onCourseRequest = useCallback(val => {
-        const cbSet =  (cur, req) => {
-            if((cur && req) && (cur.id === req.id))
-                return cur;
-            
-            // Set topic if a new course is selected
-            if(req)
-                getTopicsByCourse(firestore, req)
-                    .then(setTopics)
-                    .catch(() => setErr(ErrStates.Offline));
-    
-            return req;
-        };
-
-        try {
-            onRequestCallback(val, courses, setCurCourse, cbSet);
-        } catch(e) {
-            setErr(ErrStates.CourseNull);
-        }
-    }, [firestore, courses]);
-
-    // Topic callback
-    // TODO: Replace with Redux backend
-    const onTopicRequest = useCallback(val => {
-        try {
-            onRequestCallback(val, topics, setCurTopic, (_r, cur) => cur);
-        } catch(e) {
-            setErr(ErrStates.TopicNull);
-        }
-    }, [topics]);
-    
     return (
-        <Container maxWidth="md" style={{marginTop: '32px'}}>
-            <Switch>
-                <Route path={`${match.path}/:courseId/topic/:topicId`}>
-                    <TopicDetails course={curCourse} 
-                        topic={curTopic} 
-                        coursesLoaded={!!courses}
-                        topicsLoaded={!!topics}
-                        requestCourse={onCourseRequest}
-                        requestTopic={onTopicRequest} />
-                </Route>
+        <CoursesProvider {...props} onError={handleError}>
+            {({course, courses, topic, topics, refresh, err, errDismiss}) => (
+            <Container maxWidth="md" style={{marginTop: '32px'}}>
+                <Switch>
+                    <Route path={`${match.path}/:courseId/topic/:topicId`}>
+                        <TopicDetails course={course} topic={topic} refresh={refresh} />
+                    </Route>
 
-                <Route path={`${match.path}/:courseId`}>
-                    <TopicsList 
-                            coursesLoaded={!!courses}
-                            course={curCourse} 
-                            topics={topics}
-                            requestCourse={onCourseRequest}
-                            requestTopic={onTopicRequest} />
-                </Route>
-                        
-                <Route path={match.path}>
-                    <CourseList courses={courses} 
-                        requestCourse={onCourseRequest} />
-                </Route>
-            </Switch>
-            
-            <Snackbar open={errOpen} autoHideDuration={5000} onClose={handleErrClose}>
-                <MuiAlert severity="error" elevation={6} variant="filled" onClose={handleErrClose}>{err !== null && ErrMessages[err]}</MuiAlert>
-            </Snackbar>
-        </Container>
+                    <Route path={`${match.path}/:courseId`}>
+                        <TopicsList course={course} topics={topics} refresh={refresh} />
+                    </Route>
+                            
+                    <Route path={match.path}>
+                        <CourseList courses={courses} refresh={refresh} />
+                    </Route>
+                </Switch>
+                
+                <Snackbar open={err} autoHideDuration={5000} onClose={errDismiss}>
+                    <MuiAlert severity="error" elevation={6} variant="filled" onClose={errDismiss}>{err && ErrMessages[err]}</MuiAlert>
+                </Snackbar>
+            </Container>
+            )}
+        </CoursesProvider>
     );
+}
+
+class CoursesProvider extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { courses: null, course: null, topics: null, 
+            topic: null, lastReq: [], err: null }
+
+        this.throwError = this.throwError.bind(this);
+        this.refreshCourses = this.refreshCourses.bind(this);
+        this.refreshTopics = this.refreshTopics.bind(this);
+        this.refresh = this.refresh.bind(this);
+    }
+
+    throwError(code) {
+        if(code !== ErrStates.Offline)
+            this.setState({err: code});
+
+        this.props.onError && this.props.onError();
+    }
+
+    async refreshCourses() {
+        const {firestore, user} = this.props;
+        const courses = await getCoursesByUser(firestore, user);
+        this.setState({courses}, this._refresh);
+    }
+
+    async refreshTopics() {
+        const firestore = this.props.firestore;
+        const topics = await getTopicsByCourse(firestore, this.state.course);
+        this.setState({topics}, this._refresh);
+    }
+
+    refresh({courseId, topicId}) {        
+        let payload = {lastReq: {courseId, topicId}}
+
+        if(courseId === null)
+            payload.course = payload.topics = null;
+        
+        if(topicId === null)
+            payload.topic = null;
+
+        this.setState(payload, this._refresh);
+    }
+
+    _refresh() {
+        let differTopic = false;
+        const {course, courses, topic, topics, lastReq} = this.state;
+
+        // Request Differed by courses load
+        if(!courses) return;
+
+        if(requiresUpdate(course, lastReq.courseId)) {
+            const _course = getReqById(courses, lastReq.courseId);
+
+            if(!_course)
+                return this.throwError(ErrStates.CourseNull);
+            
+            differTopic = true;
+            this.setState({course: _course, topics: null}, this.refreshTopics);
+        }
+
+        if(!differTopic && requiresUpdate(topic, lastReq.topicId)) {
+            const _topic = getReqById(topics, lastReq.topicId);
+
+            if(!_topic)
+                return this.throwError(ErrStates.TopicNull);
+            
+            this.setState({topic: _topic});
+        }
+    }
+
+    componentDidMount() {
+        this.refreshCourses();
+    }
+
+    componentWillUnmount() {
+        this.setState({courses: null});
+    }      
+
+    render() {
+        return createElement(this.props.children, {
+            errDismiss: () => this.setState({err: null}),
+            refresh: this.refresh, 
+            ...this.state
+        });
+    }
 }
 
 export default Courses;
