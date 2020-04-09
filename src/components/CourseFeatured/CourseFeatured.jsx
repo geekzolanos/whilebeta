@@ -12,12 +12,12 @@ const useStyles = makeStyles(theme => ({
         }
     },
     root: {
-        padding: theme.spacing(4,2)
+        padding: theme.spacing(4, 2)
     },
     logo: {
         width: '148px'
     },
-    bgDark: {            
+    bgDark: {
         color: 'white',
         '& MuiChip-icon': {
             color: 'white',
@@ -25,9 +25,8 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function CourseFeatured({course, topics}) {
+function CourseFeatured({ course, topics }) {
     const classes = useStyles();
-    const topicsLength = topics.length;
 
     return (
         <Paper className={classes.root}>
@@ -42,7 +41,7 @@ function CourseFeatured({course, topics}) {
                     </Grid>
                     <Grid item className={classes.meta}>
                         <Chip variant="outlined" icon={<WatchLater />} label={`${course.duration} Hrs`} />
-                        <Chip variant="outlined" icon={<MenuBook />} label={`${topicsLength} Tema(s)`} />                        
+                        <Chip variant="outlined" icon={<MenuBook />} label={`${topics ? topics.length : '-'} Tema(s)`} />
                     </Grid>
                 </Grid>
             </Grid>

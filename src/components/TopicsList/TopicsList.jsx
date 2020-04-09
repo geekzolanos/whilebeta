@@ -1,10 +1,16 @@
 import React, { useEffect } from 'react';
-import { Typography, CircularProgress, Grid, List, Hidden, Link } from '@material-ui/core';
+import { Typography,  Grid, List, Link, Hidden } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams, useRouteMatch, Link as RouterLink } from 'react-router-dom';
-import ListTopicItem from '../ListTopicItem';
-import CourseFeatured from '../CourseFeatured';
-import TeacherCard from '../TeacherCard';
+import { ListTopicItem, SkeletonTopicItem } from '../ListTopicItem';
+import { CourseFeatured, SkeletonCourseFeatured } from '../CourseFeatured';
+import { TeacherCard, SkeletonTeacherCard } from '../TeacherCard';
+
+const SkeletonList = (
+    <List>
+        { Array(2).fill(null).map((_, i) => <SkeletonTopicItem key={i} />) }
+    </List>
+);
 
 const useStyles = makeStyles(theme => ({
     topicsTitle: {
@@ -14,34 +20,35 @@ const useStyles = makeStyles(theme => ({
 
 function TopicsList({refresh, course, topics}) {
     const {courseId} = useParams();
-    const match = useRouteMatch();
     const classes = useStyles();
+    const match = useRouteMatch();
 
     useEffect(() => { refresh({courseId}) }, [courseId, refresh]);
 
-    if(!topics)
-        return <CircularProgress />;
-    
-    const topicList = topics.length ? (
-        <List>
-            {topics.map(topic => (
-                <Link key={topic.id} component={RouterLink} color="inherit" underline="none"
-                    to={`${match.url}/topic/${topic.id}`}>
-                        
-                    <ListTopicItem value={topic} />
-                </Link>
-            ))}
-        </List>
-    ) : <Typography variant="h6">No hay temas asociados</Typography>;
+    const topicList = topics ? 
+        topics.length ? (
+            <List>
+                {topics.map(topic => (
+                    <Link key={topic.id} component={RouterLink} color="inherit" underline="none"
+                        to={`${match.url}/topic/${topic.id}`}>
+                            
+                        <ListTopicItem value={topic} />
+                    </Link>
+                ))}
+            </List>) 
+            : <Typography variant="h6">No hay temas asociados</Typography>
+        : SkeletonList;
 
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={9}>
-                <CourseFeatured course={course} topics={topics} />
+                { course ? <CourseFeatured course={course} topics={topics} />
+                    : <SkeletonCourseFeatured /> }
             </Grid>
             <Grid item md={3}>
                 <Hidden smDown>
-                    <TeacherCard teacher={course.teacher} />
+                    { course ? <TeacherCard teacher={course.teacher} />
+                        : <SkeletonTeacherCard /> }
                 </Hidden>
             </Grid>
             <Grid item xs={12} md={9}>

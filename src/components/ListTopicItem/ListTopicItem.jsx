@@ -1,9 +1,9 @@
 import React from 'react';
 import { Typography, ListItem, Grid, Chip } from '@material-ui/core';
 import { WatchLater, ChevronRight } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
     duration: {
         marginBottom: theme.spacing(2)
     },
@@ -17,11 +17,10 @@ const useStyles = makeStyles(theme => ({
         height: '100%',
         fontSize: '2.4em'
     }
-}));
+});
 
-function ListTopicItem(props) {
-    const topic = props.value;
-    const classes = useStyles();    
+function ListTopicItem({classes, ...props}) {
+    const topic = props.value; 
 
     return (
         <ListItem button divider className={classes.root}>
@@ -42,4 +41,4 @@ function ListTopicItem(props) {
     );
 }
 
-export default ListTopicItem;
+export default withStyles(styles)(ListTopicItem);

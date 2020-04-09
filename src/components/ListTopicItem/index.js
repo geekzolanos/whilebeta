@@ -1,3 +1,4 @@
 import ListTopicItem from './ListTopicItem';
+import SkeletonTopicItem from './SkeletonTopicItem';
 
-export default ListTopicItem;
+export { ListTopicItem, SkeletonTopicItem };

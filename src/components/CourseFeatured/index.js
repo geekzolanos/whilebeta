@@ -1,3 +1,4 @@
 import CourseFeatured from './CourseFeatured';
+import SkeletonCourseFeatured from './SkeletonFeatured';
 
-export default CourseFeatured;
+export { CourseFeatured, SkeletonCourseFeatured };
