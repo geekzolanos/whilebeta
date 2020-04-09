@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { IconButton, Menu, MenuItem } from '@material-ui/core';
+import React, { useState, useMemo } from 'react';
+import { IconButton, Menu, MenuItem, ListItemAvatar, Avatar, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { AccountCircle } from '@material-ui/icons';
+import { AccountCircle, AccountBox } from '@material-ui/icons';
 import { useUser } from 'reactfire';
 
 const useStyles = makeStyles(theme => ({
@@ -18,6 +18,7 @@ function UserMenu(props) {
 
   const handleClick = e => setAnchorEl(e.currentTarget);
   const handleClose = () => setAnchorEl(null);
+  const lastSign = useMemo(() => user && new Date(user.metadata.lastSignInTime).toLocaleDateString(), [user]);
   
   const handleLogout = async () => {
     await props.onLogout();
@@ -34,6 +35,16 @@ function UserMenu(props) {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}>
+
+        <MenuItem disabled={true} style={{opacity: 1}}>
+          <ListItemAvatar>
+            <Avatar>
+              <AccountBox />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary="Bienvenido(a)" secondary={`Ultimo ingreso: ${lastSign}`} />
+        </MenuItem>
+
         <MenuItem onClick={handleLogout}>Cerrar Sesion</MenuItem>
       </Menu>
     </>
