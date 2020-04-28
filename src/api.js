@@ -20,6 +20,7 @@ async function getCoursesByUser(firestore, user) {
 async function getTopicsByCourse(firestore, course) {
     const snapshot = await firestore.collection('topics')
         .where('course', '==', course.doc.ref)
+        .orderBy('createdAt', 'desc')
         .get();
         
     return snapshot.docs.map(doc => {
