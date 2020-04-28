@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { FirebaseAppProvider } from 'reactfire';
 
 const ContainerLoader = withStyles({
-  loader: {
+  root: {
     display: 'flex',
     width: '100%',
     height: '95vh',
