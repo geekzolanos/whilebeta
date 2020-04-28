@@ -1,8 +1,11 @@
 import React from 'react';
 import { Typography, ListItem, Grid, Chip } from '@material-ui/core';
-import { WatchLater, ChevronRight } from '@material-ui/icons';
+import { WatchLater, ChevronRight, NewReleases } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import styles from 'assets/jss/components/ListTopicItem/ListTopicItem';
+
+const CreatedThreshold = 259200;
+const isNew = topic => (CreatedThreshold >= topic.createdAt.seconds);
 
 export default withStyles(styles)(({classes, value}) => (
     <ListItem button divider className={classes.root}>
@@ -12,7 +15,10 @@ export default withStyles(styles)(({classes, value}) => (
             </Grid>
             <Grid item sm>
                 <Typography variant="h6" gutterBottom>{value.name}</Typography>
-                <Chip variant="outlined" size="small" icon={<WatchLater />} label={`${value.length} Min`} className={classes.duration}/>
+                <div className={classes.chipArray}>
+                    { isNew(value) && <Chip className={classes.colorSuccess} size="small" color="primary" icon={<NewReleases />} label="Nuevo" /> }
+                    <Chip variant="outlined" size="small" icon={<WatchLater />} label={`${value.length} Min`} />
+                </div>
                 <Typography variant="body2" align="justify">{value.description}</Typography>
             </Grid>
             <Grid item>

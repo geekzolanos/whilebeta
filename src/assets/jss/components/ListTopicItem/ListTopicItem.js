@@ -1,6 +1,12 @@
 export default theme => ({
-    duration: {
-        marginBottom: theme.spacing(2)
+    chipArray: {
+        marginBottom: theme.spacing(2),        
+        '& .MuiChip-root': {
+            marginRight: theme.spacing(1)
+        }
+    },
+    colorSuccess: {
+        backgroundColor: theme.palette.success.dark
     },
     root: {
         padding: theme.spacing(4,2)
