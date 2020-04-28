@@ -2,23 +2,7 @@ import React from 'react';
 import { Card } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { withStyles } from '@material-ui/core/styles';
-
-const styles = theme => ({
-    avatar: {
-        marginBottom: theme.spacing(2)
-    },
-    root: {
-        padding: theme.spacing(2.8),
-        
-        '& .MuiSkeleton-root': {
-            marginLeft: 'auto',
-            marginRight: 'auto'
-        }
-    },
-    degree: {
-        marginBottom: theme.spacing(1)
-    }
-});
+import styles from 'assets/jss/components/TeacherCard/SkeletonTeacherCard';
 
 export default withStyles(styles)(({classes}) => (
     <Card className={classes.root}>

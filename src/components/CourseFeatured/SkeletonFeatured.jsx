@@ -2,27 +2,7 @@ import React from 'react';
 import { Paper, Grid } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { withStyles } from '@material-ui/core/styles';
-
-const styles = theme => ({
-    meta: {
-        textAlign: 'right',
-        marginTop: theme.spacing(2),
-
-        '& .MuiSkeleton-text': {
-            display: 'inline-block',
-
-            '&:first-child': {
-                marginRight: theme.spacing(1)
-            }
-        }
-    },
-    root: {
-        padding: theme.spacing(4,2)
-    },
-    heading: {
-        marginTop: theme.spacing(-1.5)
-    }
-});
+import styles from 'assets/jss/components/CourseFeatured/SkeletonFeatured';
 
 export default withStyles(styles)(({classes}) => (
     <Paper className={classes.root}>

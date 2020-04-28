@@ -5,13 +5,6 @@ import { Paper, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
-    content: {    
-        padding: theme.spacing(4, 3),
-        marginTop: theme.spacing(4)
-    }
-});
-
 function TopicContent({classes, meta}) {
     const storage = useStorage();
     const [content, setContent] = useState();
@@ -47,4 +40,9 @@ function TopicContent({classes, meta}) {
     );
 }
 
-export default withStyles(styles)(TopicContent);
+export default withStyles(theme => ({
+    content: {    
+        padding: theme.spacing(4, 3),
+        marginTop: theme.spacing(4)
+    }
+}))(TopicContent);

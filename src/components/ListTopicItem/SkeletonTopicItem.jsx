@@ -3,23 +3,7 @@ import { ListItem, Grid } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { ChevronRight } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
-
-const styles = theme => ({
-    duration: {
-        marginBottom: theme.spacing(2)
-    },
-    root: {
-        padding: theme.spacing(4,2),
-        opacity: 1
-    },
-    heading: {
-        marginTop: theme.spacing(-1)
-    },
-    goIcon: {
-        height: '100%',
-        fontSize: '2.4em'
-    }
-});
+import styles from 'assets/jss/components/ListTopicItem/SkeletonTopicItem';
 
 export default withStyles(styles)(({classes}) => (
     <ListItem divider className={classes.root}>

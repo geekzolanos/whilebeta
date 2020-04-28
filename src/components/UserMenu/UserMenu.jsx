@@ -1,17 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { IconButton, Menu, MenuItem, ListItemAvatar, Avatar, ListItemText } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { AccountCircle, AccountBox } from '@material-ui/icons';
 import { useUser } from 'reactfire';
 
-const useStyles = makeStyles(theme => ({
-    userButton: {
-        marginLeft: theme.spacing(2) + 'px'
-    }
-}));
-
-function UserMenu(props) {
-  const classes = useStyles();
+export default ({onLogout}) => {
   const user = useUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -21,14 +13,17 @@ function UserMenu(props) {
   const lastSign = useMemo(() => user && new Date(user.metadata.lastSignInTime).toLocaleDateString(), [user]);
   
   const handleLogout = async () => {
-    await props.onLogout();
+    await onLogout();
     handleClose();
   }
 
   return (
     <>
-      <IconButton className={classes.userButton} color="inherit" onClick={handleClick}>
-        <AccountCircle></AccountCircle>        
+      <IconButton color="inherit"
+        onClick={handleClick}
+        style={{marginLeft: 16}}>
+
+        <AccountCircle></AccountCircle>
       </IconButton>
 
       <Menu
@@ -50,5 +45,3 @@ function UserMenu(props) {
     </>
   )
 }
-
-export default UserMenu;

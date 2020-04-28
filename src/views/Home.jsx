@@ -1,74 +1,14 @@
 import React from 'react';
 import { Box, Container, Typography, Button, Grid, Paper, Link } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import { PlayArrow, Accessibility, TrackChanges, LinkedIn } from '@material-ui/icons';
 import { ReactComponent as Logo } from '../assets/img/team.svg';
+import { withStyles } from '@material-ui/core/styles';
+import styles from 'assets/jss/views/Home';
 
-const useStyles = makeStyles(theme => ({
-    title: {
-        marginBottom: theme.spacing(3)
-    },
-    featuresTitle: {
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(1)
-    },
-    featured: {
-        position: 'relative',
-        backgroundImage: 'linear-gradient(120deg, #f6d365 0%, #fda085 100%)',
-        color: 'white'
-    },
-    featuredContainer: {
-        position: 'relative',
-        paddingTop: theme.spacing(10),
-        paddingBottom: theme.spacing(32),
-        zIndex: 10
-    },
-    btnLogin: {
-        backgroundColor: 'white',
-        color: 'black',
-        fontSize: '1.2em',
-        letterSpacing: '1px',
-        padding: theme.spacing(1, 6),
-        marginRight: theme.spacing(3),
-    },
-    btnVideo: {
-        color: 'inherit'
-    },
-    lineBorder: {
-        position: 'absolute',
-        bottom: 0,
-        fill: '#fafafa'
-    },
-    featuredImg: {
-        textAlign: 'right',
-
-        '& svg': {
-            fill: 'white',
-            height: '256px'
-        }
-    },
-    features: {
-        position: 'relative',
-        zIndex: 10
-    },
-    featuresPaper: {
-        display: 'flex',
-        alignItems: 'center',
-        marginTop: theme.spacing(-24),
-        padding: theme.spacing(4,8),
-        borderRadius: '10px',
-
-        [theme.breakpoints.up('md')]: {
-            height: '320px'
-        }
-    }
-}));
-
-function Home() {
-    const classes = useStyles();
-
-    const featured = (
+export default withStyles(styles)(({classes}) => (
+    <>
+        {/* Featured */}
         <Box className={classes.featured}>
             <Container className={classes.featuredContainer} maxWidth="md">
                 <Grid container alignItems="center">
@@ -85,9 +25,9 @@ function Home() {
             
             <svg className={classes.lineBorder} viewBox="0 0 1440 320"><path d="M0,235L1440,288L1440,320L0,320Z"></path></svg>
         </Box>
-    );
 
-    const features = (
+        
+        {/* features */}
         <Container maxWidth="md" className={classes.features}>
             <Paper className={classes.featuresPaper} elevation={2}>
                 <Grid container justify="center" spacing={4}>
@@ -109,9 +49,5 @@ function Home() {
                 </Grid>
             </Paper>
         </Container>
-    );
-
-    return [featured, features];
-}
-
-export default Home;
+    </>
+));

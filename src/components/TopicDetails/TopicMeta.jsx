@@ -1,21 +1,8 @@
 import React, { useMemo } from 'react';
 import { Typography, CircularProgress, Card, CardContent, CardActions, Button, Table, TableBody, TableCell, TableRow, Link } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
 import { Mail } from '@material-ui/icons';
 
-const styles = {
-    mAuto: {
-        margin: 'auto'
-    },
-    title: {
-        fontSize: 14
-    },
-    pos: {
-        marginBottom: 12
-    }
-};
-
-function TopicMeta({classes, topic, course}) {
+export default ({topic, course}) => {
     const meta = useMemo(() => 
         topic ? [
             {name: 'Duracion', value: `${topic.length} min`},
@@ -29,11 +16,19 @@ function TopicMeta({classes, topic, course}) {
     return (
         <Card variant="outlined">
             <CardContent>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>Informacion</Typography>
+                <Typography gutterBottom
+                    color="textSecondary" 
+                    style={{fontSize: 14}}>Informacion</Typography>
+
                 <Typography variant="h5" gutterBottom>{topic.name}</Typography>
-                <Typography variant="body2" component="p" align="justify" className={classes.pos}>{topic.description}</Typography>
+
+                <Typography variant="body2" 
+                    component="p"
+                    align="justify" 
+                    style={{marginBottom: 12}}>{topic.description}</Typography>
+
                 <Typography variant="overline" gutterBottom>Detalles</Typography>
-                <Table className={classes.table} size="small">
+                <Table size="small">
                     <TableBody>
                         {meta.map(item => (
                             <TableRow key={item.name}>
@@ -48,10 +43,13 @@ function TopicMeta({classes, topic, course}) {
             </CardContent>
             
             <CardActions>
-                <Link className={classes.mAuto} underline="none" href={`mailto:${course.teacher.email}`}><Button size="small" startIcon={<Mail />}>Contactar al profesor</Button></Link>
+                <Link underline="none" 
+                    href={`mailto:${course.teacher.email}`}
+                    style={{margin: 'auto'}}>
+
+                    <Button size="small" startIcon={<Mail />}>Contactar al profesor</Button>
+                </Link>
             </CardActions>
         </Card>
     );
 }
-
-export default withStyles(styles)(TopicMeta);

@@ -3,67 +3,14 @@ import { Container, Avatar, Paper, Grid, Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { LockOutlined } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import LoginForm from './LoginForm';
+import styles from 'assets/jss/components/Login/LoginComponent';
+import formStyle from 'assets/jss/components/Login/LoginForm';
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    backgroundImage: 'url(https://source.unsplash.com/featured/?nature)',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },  
-  grid: {    
-    height: '100vh'
-  },
-  paper: {
-    padding: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    minHeight: '72%',
+const LoginFormStyled = withStyles(formStyle)(LoginForm);
 
-    [theme.breakpoints.up('md')]: {
-      'flexGrow': 0,
-      'maxWidth': '34%',
-      'flexBasis': '34%'
-    }
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  mAuto: {
-    margin: 'auto'
-  }  
-}));
-
-const LoginFormStyled = withStyles(theme => ({
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-      margin: theme.spacing(3, 0, 2),
-  },
-  cedula: {
-    '& input': {
-      '-moz-appearance': 'textfield',
-      'appearance': 'none', 
-      margin: 0,
-      
-      '&::-webkit-inner-spin-button, &::-webkit-outer-spin-button': { 
-        '-webkit-appearance': 'none',
-        margin: 0
-      }
-    }
-  }
-}))(LoginForm)
-
-function LoginComponent({err, ...props}) {
-  const classes = useStyles();  
+export default withStyles(styles)(({classes, handleSubmit, err, busy}) => {
   const [errOpen, setErrOpen] = useState(false);
 
   // Error Handling
@@ -80,7 +27,7 @@ function LoginComponent({err, ...props}) {
           <Typography component="h1" variant="h5">
             Ingreso al sistema
           </Typography>
-          <LoginFormStyled onSubmit={props.handleSubmit} busy={props.busy} />
+          <LoginFormStyled onSubmit={handleSubmit} busy={busy} />
         </Grid>
       </Grid>
       <Snackbar open={errOpen} autoHideDuration={5000} onClose={handleErrClose}>
@@ -90,6 +37,4 @@ function LoginComponent({err, ...props}) {
       </Snackbar>
     </Container>
   );
-}
-
-export default LoginComponent;
+});

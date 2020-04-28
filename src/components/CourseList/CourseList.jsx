@@ -9,7 +9,7 @@ const SkeletonGrid = Array(3).fill(null).map((_, i) =>
     </Grid>
 );
 
-function CourseList(props) {
+export default props => {
     const courses = props.courses;
     const match = useRouteMatch();
 
@@ -35,5 +35,3 @@ function CourseList(props) {
         </>
     );
 }
-
-export default CourseList;

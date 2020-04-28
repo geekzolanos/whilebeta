@@ -4,13 +4,13 @@ import { ReactComponent as VolumeIcon } from 'assets/img/volume.svg';
 import { ReactComponent as FullscreenIcon } from 'assets/img/fullscreen.svg';
 import { ReactComponent as PlayIcon } from 'assets/img/play.svg';
 import clsx from 'clsx';
-import styles from './style';
+import styles from '../../assets/jss/components/TopicPlayer/TopicPlayer';
 import { CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { VideoPlayer, PlaybackStates } from './videoPlayer';
 import { neatTime } from 'config/utils';
 
-function TopicPlayer({classes, ...props}) {
+export default withStyles(styles)(({classes, ...props}) => {
     const storage = useStorage();
     const canvasRef = useRef();
     const playerRef = useRef();
@@ -112,6 +112,4 @@ function TopicPlayer({classes, ...props}) {
             </div>
         </>
     );
-}
-
-export default withStyles(styles)(TopicPlayer);
+})

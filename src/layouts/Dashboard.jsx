@@ -1,33 +1,16 @@
 import React, { useState } from 'react';
 import { Toolbar, AppBar, Typography, Button } from '@material-ui/core';
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { DashboardRouter } from '../components/Routers';
 import UserMenu from '../components/UserMenu';
 import Copyright from '../components/Copyright';
 import theme from '../config/theme.js';
 import { useAuth, AuthCheck } from 'reactfire';
 import { Link } from 'react-router-dom';
+import styles from 'assets/jss/layouts/Dashboard';
+import { withStyles } from '@material-ui/core/styles';
 
-const useStyle = makeStyles(theme => ({
-  topbar: {
-    backgroundColor: 'white',
-    color: '#333'
-  },
-  title: {
-    flexGrow: 1
-  },  
-  link: {
-    color: 'inherit',
-    textDecoration: 'none'
-  },  
-  copyright: {
-      marginTop: theme.spacing(4),
-      marginBottom: theme.spacing(2)
-  }
-}));
-
-function Dashboard() {
-  const classes = useStyle();
+export default withStyles(styles)(({classes}) => {
   const auth = useAuth();
   
   const [busy, setBusy] = useState(false);
@@ -74,6 +57,4 @@ function Dashboard() {
       </>
     </ThemeProvider>
   );
-}
-
-export default Dashboard;
+});

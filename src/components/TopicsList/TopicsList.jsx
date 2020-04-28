@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Typography,  Grid, List, Link, Hidden } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { useParams, useRouteMatch, Link as RouterLink } from 'react-router-dom';
 import { ListTopicItem, SkeletonTopicItem } from '../ListTopicItem';
 import { CourseFeatured, SkeletonCourseFeatured } from '../CourseFeatured';
 import { TeacherCard, SkeletonTeacherCard } from '../TeacherCard';
+import { withStyles } from '@material-ui/core/styles';
 
 const SkeletonList = (
     <List>
@@ -12,15 +12,8 @@ const SkeletonList = (
     </List>
 );
 
-const useStyles = makeStyles(theme => ({
-    topicsTitle: {
-        marginTop: theme.spacing(2)
-    }
-}));
-
-function TopicsList({refresh, course, topics}) {
+function TopicsList({classes, refresh, course, topics}) {
     const {courseId} = useParams();
-    const classes = useStyles();
     const match = useRouteMatch();
 
     useEffect(() => { refresh({courseId}) }, [courseId, refresh]);
@@ -59,4 +52,8 @@ function TopicsList({refresh, course, topics}) {
     );
 }
 
-export default TopicsList;
+export default withStyles(theme => ({
+    topicsTitle: {
+        marginTop: theme.spacing(2)
+    }
+}))(TopicsList);

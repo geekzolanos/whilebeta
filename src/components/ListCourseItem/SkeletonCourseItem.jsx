@@ -2,26 +2,7 @@ import React from 'react';
 import { Box, Paper } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Skeleton from '@material-ui/lab/Skeleton';
-
-const styles = theme => ({
-    paper: {
-        padding: theme.spacing(3),
-        height: '100%'        
-    },
-    box: {
-        position: 'relative',
-        width: '100%',
-        height: '100%'
-    },
-    logo: {
-        marginBottom: theme.spacing(1)
-    },
-    duration: {
-        position: 'absolute',
-        top: 0,
-        right: 0  
-    }
-});
+import styles from 'assets/jss/components/ListCourseItem/SkeletonCourseItem';
 
 export default withStyles(styles)(({classes}) => (
     <Paper className={classes.paper} elevation={2}>

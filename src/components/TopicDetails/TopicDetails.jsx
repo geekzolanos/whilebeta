@@ -6,7 +6,7 @@ import TopicPlayer from '../TopicPlayer';
 import TopicContent from '../TopicContent';
 import TopicMeta from './TopicMeta';
 
-function TopicDetails({refresh, topic, course}) {
+export default ({refresh, topic, course}) => {
     const {courseId, topicId} = useParams();
     
     const data = {course, topic};
@@ -33,5 +33,3 @@ function TopicDetails({refresh, topic, course}) {
         </>
     );
 }
-
-export default TopicDetails;
