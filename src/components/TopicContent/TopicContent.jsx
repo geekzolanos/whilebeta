@@ -24,11 +24,14 @@ function TopicContent({classes, meta}) {
     }, [meta, storage]);
 
     return (        
-        <Paper className={classes.content}>
+        <Paper className={classes.root}>
             <Typography variant="subtitle2" color="textSecondary" gutterBottom>Contenido</Typography>
             
             { content ? 
-                <ReactMarkdown source={content} /> : 
+                <ReactMarkdown
+                    className={classes.content}
+                    source={content}
+                    escapeHtml={false} /> : 
                 <>
                     <Skeleton animation="wave" width={200} height={64} />
                     <Skeleton animation="wave" />
@@ -41,8 +44,13 @@ function TopicContent({classes, meta}) {
 }
 
 export default withStyles(theme => ({
-    content: {    
+    root: {    
         padding: theme.spacing(4, 3),
         marginTop: theme.spacing(4)
+    },
+    content: {
+        '& img': {
+            maxWidth: '100%'
+        }
     }
 }))(TopicContent);
