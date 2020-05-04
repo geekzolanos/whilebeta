@@ -1,3 +1,5 @@
+import { TopicTypes } from 'config/constants';
+
 async function getCoursesByUser(firestore, user) {
     const userRef = firestore.collection('users').doc(user.uid);
 
@@ -20,6 +22,7 @@ async function getCoursesByUser(firestore, user) {
 async function getTopicsByCourse(firestore, course) {
     const snapshot = await firestore.collection('topics')
         .where('course', '==', course.doc.ref)
+        .where('type', '==', TopicTypes.Public)
         .orderBy('createdAt', 'desc')
         .get();
         
